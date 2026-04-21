@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stop Watch</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/706a0c2fa2.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container stopwatch">
+        <h1>Stop Watch</h1>
+        <div id="stopwatch" class="time">
+            <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>:<span id="fraction">00</span>
+        </div>
+
+        <div class="buttons">
+             <button id="stop" class="stop" aria-label="Stop">
+                <i class="fa-solid fa-stop"></i>
+            </button>
+            <button id="start" class="start" aria-label="Start">
+                <i class="fa-solid fa-hourglass-start"></i>
+            </button>
+           
+            <button id="reset" class="reset" aria-label="Reset">
+                <i class="fa-solid fa-redo"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    var hoursEl = document.getElementById("hours");
+    var minutesEl = document.getElementById("minutes");
+    var secondsEl = document.getElementById("seconds");
+    var fractionEl = document.getElementById("fraction");
+
+    var startBtn = document.getElementById("start");
+    var stopBtn = document.getElementById("stop");
+    var resetBtn = document.getElementById("reset");
+
+    if (!hoursEl || !minutesEl || !secondsEl || !fractionEl || !startBtn || !stopBtn || !resetBtn) {
+        return;
+    }
+
+    var hours = 0;
+    var minutes = 0;
+    var seconds = 0;
+    var fraction = 0;
+    var timerId = null;
+
+    function updateDisplay() {
+        hoursEl.textContent = String(hours).padStart(2, "0");
+        minutesEl.textContent = String(minutes).padStart(2, "0");
+        secondsEl.textContent = String(seconds).padStart(2, "0");
+        fractionEl.textContent = String(fraction).padStart(2, "0");
+    }
+
+    function tick() {
+        fraction = fraction + 1;
+
+        if (fraction === 100) {
+            fraction = 0;
+            seconds = seconds + 1;
+        }
+
+        if (seconds === 60) {
+            seconds = 0;
+            minutes = minutes + 1;
+        }
+
+        if (minutes === 60) {
+            minutes = 0;
+            hours = hours + 1;
+        }
+
+        updateDisplay();
+    }
+
+    function startTimer() {
+        if (timerId !== null) {
+            return;
+        }
+        timerId = window.setInterval(tick, 10);
+    }
+
+    function stopTimer() {
+        if (timerId === null) {
+            return;
+        }
+        window.clearInterval(timerId);
+        timerId = null;
+    }
+
+    function resetTimer() {
+        stopTimer();
+        hours = 0;
+        minutes = 0;
+        seconds = 0;
+        fraction = 0;
+        updateDisplay();
+    }
+
+    startBtn.addEventListener("click", startTimer);
+    stopBtn.addEventListener("click", stopTimer);
+    resetBtn.addEventListener("click", resetTimer);
+
+    updateDisplay();
+});
+    </script>
+    
+</body>
+</html>
